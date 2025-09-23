@@ -1,0 +1,158 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ExperienceType {
+FULL_TIME
+PART_TIME
+INTERNSHIP
+APPRENTICESHIP
+FREELANCE
+VOLUNTEER
+OTHER
+}
+
+enum EngagementType {
+ASSOCIATION
+VOLUNTEER
+LEADERSHIP
+EVENT
+COMMUNITY
+OTHER
+}
+
+model Technology {
+id String @id @default(cuid())
+name String
+slug String @unique
+category String?
+iconUrl String?
+
+projects Project[]
+experiences Experience[]
+engagements Engagement[]
+
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+}
+
+model Project {
+id String @id @default(cuid())
+title String
+slug String @unique
+keywords String[] @default([])
+teamSize Int?
+durationMonths Int?
+startDate DateTime?
+endDate DateTime?
+description String? @db.Text
+keyPoints String[] @default([])
+favorite Boolean @default(false)
+logoUrl String?
+
+technologies Technology[]
+
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+}
+
+model Experience {
+id String @id @default(cuid())
+title String
+place String?
+kind ExperienceType @default(OTHER)
+description String? @db.Text
+durationMonths Int?
+startDate DateTime?
+endDate DateTime?
+keyAchievements String[] @default([])
+
+technologies Technology[]
+
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+}
+
+model Engagement {
+id String @id @default(cuid())
+title String
+place String?
+kind EngagementType @default(OTHER)
+description String? @db.Text
+durationMonths Int?
+startDate DateTime?
+endDate DateTime?
+keyAchievements String[] @default([])
+
+technologies Technology[]
+
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  role          Role      @default(USER)
+  isAdmin Boolean @default(false)
+  passwordHash  String?
+  accounts      Account[]
+  sessions      Session[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
