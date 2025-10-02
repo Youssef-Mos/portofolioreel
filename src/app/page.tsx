@@ -1,6 +1,8 @@
 import { Footer } from "@/components/layout/footer";
 import NavigationBar from "@/components/layout/home/nav";
 import { About } from "@/components/sections/about";
+import { Suspense } from "react";
+import { HeroSkeleton } from "@/components/skeletons/HeroSkeleton";
 import { Contact } from "@/components/sections/contact";
 import { Experience } from "@/components/sections/experiences";
 import { Hero } from "@/components/sections/Hero";
@@ -15,7 +17,9 @@ export default function Home() {
         {/* Effet de lumière subtil avec couleur primaire */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
         <NavigationBar />
-        <Hero />
+        <Suspense fallback={<HeroSkeleton />}>
+      <Hero />
+    </Suspense>
         <About />
         <Projects />
         <Experience />

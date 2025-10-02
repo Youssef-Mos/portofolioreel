@@ -15,6 +15,7 @@ import {
   ExternalLink,
   Globe
 } from 'lucide-react';
+import Image from 'next/image';
 
 export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -60,19 +61,19 @@ export const Footer: React.FC = () => {
     { 
       icon: <Mail className="w-5 h-5" />, 
       label: 'Email', 
-      value: 'youssef.mosbah@example.com',
-      link: 'mailto:youssef.mosbah@example.com'
+      value: 'youssefmosbah04@gmail.com',
+      link: 'mailto:youssefmosbah04@gmail.com'
     },
     { 
       icon: <Phone className="w-5 h-5" />, 
       label: 'Téléphone', 
-      value: '+33 6 XX XX XX XX',
-      link: 'tel:+33XXXXXXXXX'
+      value: '+33 7 67 06 96 70',
+      link: 'tel:+33767069670'
     },
     { 
       icon: <MapPin className="w-5 h-5" />, 
       label: 'Localisation', 
-      value: 'Lille, France',
+      value: 'Paris, France',
       link: '#'
     }
   ];
@@ -81,19 +82,19 @@ export const Footer: React.FC = () => {
     { 
       name: 'GitHub', 
       icon: <Github className="w-5 h-5" />, 
-      href: 'https://github.com/yourusername',
+      href: 'https://github.com/Youssef-Mos',
       color: 'hover:text-gray-900'
     },
     { 
       name: 'LinkedIn', 
       icon: <Linkedin className="w-5 h-5" />, 
-      href: 'https://linkedin.com/in/yourusername',
+      href: 'https://www.linkedin.com/in/youssef-mosbah-855652292/',
       color: 'hover:text-blue-600'
     },
     { 
       name: 'Email', 
       icon: <Mail className="w-5 h-5" />, 
-      href: 'mailto:youssef.mosbah@example.com',
+      href: 'mailto:youssefmosbah04@gmail.com',
       color: 'hover:text-purple-600'
     }
   ];
@@ -121,9 +122,14 @@ export const Footer: React.FC = () => {
               }`}
             >
               <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center hover:scale-110 transition-transform duration-300">
-                  <span className="text-white font-bold text-lg">YM</span>
-                </div>
+                <div className="w-12 h-12 rounded-xl relative overflow-hidden hover:scale-110 transition-transform duration-300 shadow-md">
+      <Image
+        src="/youssef.JPG"   // mets ton image dans /public
+        alt="Logo YM"
+        fill
+        className="object-cover"
+      />
+    </div>
                 <div>
                   <h3 className="text-xl font-bold">Youssef Mosbah</h3>
                   <p className="text-gray-400 text-sm">Étudiant Ingénieur</p>
@@ -131,8 +137,8 @@ export const Footer: React.FC = () => {
               </div>
               
               <p className="text-gray-300 leading-relaxed">
-                Passionné par la technologie et l'innovation, je développe des solutions 
-                créatives alliant développement web et sciences des données.
+                Étudiant en Data Science, passionné par l’analyse de données, l’IA et la création de solutions innovantes.
+ 
               </p>
 
               {/* Social Links */}

@@ -92,7 +92,7 @@ export const Contact: React.FC = () => {
     {
       name: "LinkedIn",
       username: "Youssef Mosbah",
-      url: "https://linkedin.com/in/youssef-mosbah",
+      url: "https://www.linkedin.com/in/youssef-mosbah-855652292/",
       icon: <Linkedin className="w-6 h-6" />,
       color: "blue",
       description: "Réseau professionnel"
@@ -377,7 +377,7 @@ export const Contact: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.button
                 onClick={() => window.location.href = '/contact'}
-                className="px-8 py-3 bg-white text-blue-600 rounded-xl font-medium hover:shadow-lg transition-all duration-300 flex items-center space-x-2 justify-center"
+                className="px-8 py-3 cursor-pointer bg-white text-blue-600 rounded-xl font-medium hover:shadow-lg transition-all duration-300 flex items-center space-x-2 justify-center"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >

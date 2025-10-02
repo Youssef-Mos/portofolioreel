@@ -33,6 +33,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useRouter } from "next/navigation";
 import { useProjects, useExperiences, useEngagements } from '@/hooks/useApi';
+import Image from "next/image";
 
 // Hook pour détecter la section active
 const useActiveSection = () => {
@@ -242,7 +243,7 @@ const NavigationBar = () => {
     {
       name: "Projets",
       link: "projects",
-      icon: <FolderOpen className="w-4 h-4" />,
+      icon: <FolderOpen className="w-4 h-4 " />,
       hasSubmenu: true,
       submenu: [
         {
@@ -418,9 +419,15 @@ const NavigationBar = () => {
                 whileTap={{ scale: 0.95 }}
                 onClick={() => scrollToSection('home')}
               >
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">YM</span>
-                </div>
+                <div className="w-8 h-8 rounded-lg overflow-hidden">
+                <Image
+                  src="/youssef.JPG"    // chemin relatif depuis /public
+                  alt="YM"
+                  width={32}           // correspond à w-8
+                  height={32}          // correspond à h-8
+                  className="object-cover"
+                />
+              </div>
                 <span className="font-bold text-lg bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
                   Youssef Mosbah
                 </span>
@@ -507,35 +514,7 @@ const NavigationBar = () => {
                           </div>
 
                           {/* Thème de couleur */}
-                          <div className="space-y-2">
-                            <label className="text-xs font-medium text-gray-600 uppercase tracking-wide">Couleur</label>
-                            <div className="grid grid-cols-6 gap-2">
-                              {themes.map((theme) => (
-                                <button
-                                  key={theme.name}
-                                  onClick={() => setThemeColor(theme.name as any)}
-                                  className={`relative h-9 rounded-md transition-all hover:scale-105 ${
-                                    themeColor === theme.name ? 'ring-2 ring-offset-1 ring-gray-900' : ''
-                                  }`}
-                                  style={{ backgroundColor: theme.color }}
-                                  title={theme.label}
-                                >
-                                  {themeColor === theme.name && (
-                                    <Check className="w-4 h-4 text-white absolute inset-0 m-auto" strokeWidth={3} />
-                                  )}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* Mode sombre */}
-                          <div className="flex items-center justify-between py-1">
-                            <div className="flex items-center gap-2">
-                              {darkMode ? <Moon className="w-4 h-4 text-gray-600" /> : <Sun className="w-4 h-4 text-gray-600" />}
-                              <span className="text-sm font-medium text-gray-700">Mode sombre</span>
-                            </div>
-                            <Switch checked={darkMode} onCheckedChange={toggleDarkMode} />
-                          </div>
+                          
 
                           {/* Divider */}
                           <div className="border-t border-gray-100" />
@@ -546,7 +525,7 @@ const NavigationBar = () => {
                               router.push('/login');
                               setShowSettingsPanel(false);
                             }}
-                            className="w-full flex items-center justify-between px-3 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-md transition-colors text-sm font-medium"
+                            className="w-full cursor-pointer flex items-center justify-between px-3 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-md transition-colors text-sm font-medium"
                           >
                             <div className="flex items-center gap-2">
                               <LogIn className="w-4 h-4" />
@@ -563,7 +542,7 @@ const NavigationBar = () => {
                 {/* Bouton Contact principal */}
                 <button
                   onClick={handleContactClick}
-                  className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-medium transition-colors"
+                  className="px-6 py-2 cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-medium transition-colors"
                 >
                   Me contacter
                 </button>
@@ -732,10 +711,10 @@ const NavigationBar = () => {
                           }
                           setMobileMenuOpen(false);
                         }}
-                        className={`flex items-center space-x-3 p-3 rounded-xl transition-colors w-full text-left ${
+                        className={`flex items-center cursor-pointer space-x-3 p-3 rounded-xl transition-colors w-full text-left ${
                           activeSection === item.link 
-                            ? 'bg-blue-50 text-blue-600' 
-                            : 'hover:bg-gray-50'
+                            ? 'bg-blue-50 text-blue-600 cursor-pointer' 
+                            : 'hover:bg-gray-50 cursor-pointer'
                         }`}
                       >
                         {item.icon}
