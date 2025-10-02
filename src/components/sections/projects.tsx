@@ -467,7 +467,7 @@ export const Projects: React.FC = () => {
 
         {/* Actions avec effet hover - CETTE PARTIE EST NOUVELLE */}
         <div className="flex flex-wrap gap-3 mb-4">
-          {project.demoUrl && (
+           {/*{project.demoUrl && (
             <button
               onClick={(e) => {
                 e.stopPropagation()
@@ -480,7 +480,7 @@ export const Projects: React.FC = () => {
             </button>
           )}
           
-          {project.githubUrl && (
+         {project.githubUrl && (
             <button
               onClick={(e) => {
                 e.stopPropagation()
@@ -491,7 +491,7 @@ export const Projects: React.FC = () => {
               <Github className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
               <span>Code</span>
             </button>
-          )}
+          )}*/}
         </div>
 
         {/* NOUVEAU : Call to action avec effet hover */}

@@ -4,10 +4,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SectionWrapper } from '../ui/SectionWrapper';
 import { ArrowDown, Download, Github, Linkedin, Mail, ChevronDown, Briefcase, FileText } from 'lucide-react';
+import Image from 'next/image';
 
 export const Hero: React.FC = () => {
   const [showCVOptions, setShowCVOptions] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [loaded, setLoaded] = useState(false);
 
   // Fermer le dropdown si on clique en dehors
   useEffect(() => {
@@ -44,9 +46,16 @@ export const Hero: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
               
               {/* Main avatar */}
-              <div className="w-full h-full rounded-full bg-gradient-to-r from-blue-600 to-purple-600 relative z-10 flex items-center justify-center text-5xl font-bold text-white shadow-2xl group-hover:scale-105 transition-transform duration-300">
-                YM
-              </div>
+              <div className="w-full h-full rounded-full overflow-hidden relative z-10 shadow-2xl group-hover:scale-105 transition-transform duration-300">
+            {/* Skeleton (affiché tant que l'image n'est pas chargée) */}
+      
+            <Image
+              src="/youssef.JPG"   // ton image dans /public
+              alt="Profil"
+              fill                // prend toute la div
+              className="object-cover"
+            />
+          </div>
               
               {/* Status indicator */}
               <div className="absolute bottom-2 right-2 w-6 h-6 bg-green-500 border-4 border-white rounded-full z-20">
@@ -83,7 +92,7 @@ export const Hero: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.6 }}
             >
               Spécialisé en <span className="font-semibold text-blue-600">sciences des données</span> et 
-              <span className="font-semibold text-purple-600"> ingénierie des marchés financiers</span>.
+              <span className="font-semibold text-purple-600"> développeur web</span>.
               <br />
               Passionné par l'innovation technologique et l'intelligence artificielle.
             </motion.p>
@@ -99,11 +108,11 @@ export const Hero: React.FC = () => {
               <div className="relative" ref={dropdownRef}>
                 <motion.button 
                   onClick={() => setShowCVOptions(!showCVOptions)}
-                  className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-3"
+                  className="group px-8 py-4 cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-3"
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <Download className="w-5 h-5 group-hover:animate-bounce" />
+                  <Download className="w-5 h-5 group-hover:animate-bounce " />
                   <span>Télécharger CV</span>
                   <motion.div
                     animate={{ rotate: showCVOptions ? 180 : 0 }}
@@ -139,9 +148,9 @@ export const Hero: React.FC = () => {
                           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-200">
                             <Briefcase className="w-5 h-5 text-white" />
                           </div>
-                          <div className="text-left flex-1">
+                          <div className="text-left cursor-pointer flex-1">
                             <p className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">CV Financier</p>
-                            <p className="text-xs text-gray-500">Marchés & Data Science</p>
+                            <p className="text-xs text-gray-500">CV Formel</p>
                           </div>
                           <Download className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </motion.button>
@@ -155,9 +164,9 @@ export const Hero: React.FC = () => {
                           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-200">
                             <FileText className="w-5 h-5 text-white" />
                           </div>
-                          <div className="text-left flex-1">
+                          <div className="text-left cursor-pointer flex-1">
                             <p className="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">CV Classique</p>
-                            <p className="text-xs text-gray-500">Full-Stack & Ingénierie</p>
+                            <p className="text-xs text-gray-500"></p>
                           </div>
                           <Download className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </motion.button>
@@ -173,30 +182,30 @@ export const Hero: React.FC = () => {
               </div>
               
               <motion.button 
-                className="group px-8 py-4 bg-white border-2 border-gray-200 text-gray-700 rounded-2xl font-semibold hover:border-blue-500 hover:text-blue-600 transition-all duration-300 flex items-center space-x-3 shadow-md hover:shadow-lg"
+                className="group px-8 py-4 cursor-pointer bg-white border-2 border-gray-200 text-gray-700 rounded-2xl font-semibold hover:border-blue-500 hover:text-blue-600 transition-all duration-300 flex items-center space-x-3 shadow-md hover:shadow-lg"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <Github className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                <span>GitHub</span>
+                <span><a href='https://github.com/Youssef-Mos' target="_blank" rel="noopener noreferrer">GitHub</a></span>
               </motion.button>
               
               <motion.button 
-                className="group px-8 py-4 bg-white border-2 border-gray-200 text-gray-700 rounded-2xl font-semibold hover:border-blue-500 hover:text-blue-600 transition-all duration-300 flex items-center space-x-3 shadow-md hover:shadow-lg"
+                className="group px-8 py-4 cursor-pointer bg-white border-2 border-gray-200 text-gray-700 rounded-2xl font-semibold hover:border-blue-500 hover:text-blue-600 transition-all duration-300 flex items-center space-x-3 shadow-md hover:shadow-lg"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <Linkedin className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                <span>LinkedIn</span>
+                <span><a href='https://www.linkedin.com/in/youssef-mosbah-855652292/' target="_blank" rel="noopener noreferrer">LinkedIn</a></span>
               </motion.button>
               
               <motion.button 
-                className="group px-8 py-4 bg-white border-2 border-gray-200 text-gray-700 rounded-2xl font-semibold hover:border-blue-500 hover:text-blue-600 transition-all duration-300 flex items-center space-x-3 shadow-md hover:shadow-lg"
+                className="group px-8 py-4 cursor-pointer bg-white border-2 border-gray-200 text-gray-700 rounded-2xl font-semibold hover:border-blue-500 hover:text-blue-600 transition-all duration-300 flex items-center space-x-3 shadow-md hover:shadow-lg"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <Mail className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                <span>Contact</span>
+                <span><a href='/contact'>Contact</a></span>
               </motion.button>
             </motion.div>
           </div>

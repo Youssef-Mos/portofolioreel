@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useMemo } from 'react';
-import { easeOut, motion } from 'framer-motion';
 import { SectionWrapper } from '../ui/SectionWrapper';
 import { useExperiences, useEngagements } from '@/hooks/useApi';
 import { 
@@ -67,7 +66,6 @@ interface EngagementFromApi {
 }
 
 // Fonctions de mapping pour les expériences professionnelles
-// Correction pour la fonction mapExperienceApiData
 function mapExperienceApiData(apiExp: ExperienceFromApi) {
   const formatPeriod = (startDate: string | null, endDate: string | null) => {
     if (!startDate) return 'Période non spécifiée';
@@ -136,7 +134,7 @@ function mapExperienceApiData(apiExp: ExperienceFromApi) {
   };
 
   return {
-    id: apiExp.id, // ✅ Gardez l'ID original (string cuid)
+    id: apiExp.id,
     company: apiExp.place || 'Non spécifié',
     role: apiExp.title,
     period: formatPeriod(apiExp.startDate, apiExp.endDate),
@@ -209,13 +207,12 @@ function mapEngagementApiData(apiEng: EngagementFromApi) {
     return colors[kind as keyof typeof colors] || 'green';
   };
 
-  // Créer un projet pour les engagements (adapté au format existant)
   const project = apiEng.title.includes('Basket') ? 'Projet Ouvert - Basket Fauteuil' : 
                  apiEng.title.includes('COVID') ? 'Campagne de vaccination COVID-19' :
                  apiEng.title.includes('alimentaire') ? 'Aide alimentaire' : '';
 
   return {
-    id: apiEng.id, // Garder comme string (cuid)
+    id: apiEng.id,
     organization: apiEng.place || 'Non spécifié',
     role: apiEng.title,
     period: formatPeriod(apiEng.startDate, apiEng.endDate),
@@ -233,11 +230,9 @@ function mapEngagementApiData(apiEng: EngagementFromApi) {
 export const Experience: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'professional' | 'associative'>('professional');
 
-  // Utiliser les hooks pour récupérer les données
   const { data: apiExperiences, loading: loadingExp, error: errorExp } = useExperiences();
   const { data: apiEngagements, loading: loadingEng, error: errorEng } = useEngagements();
 
-  // Mapper les données API vers le format attendu
   const professionalExperiences = useMemo(() => {
     if (!apiExperiences) return [];
     return apiExperiences.map(mapExperienceApiData);
@@ -247,28 +242,6 @@ export const Experience: React.FC = () => {
     if (!apiEngagements) return [];
     return apiEngagements.map(mapEngagementApiData);
   }, [apiEngagements]);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: easeOut
-      }
-    }
-  };
 
   const getColorClasses = (color: string) => {
     const colors = {
@@ -324,7 +297,6 @@ export const Experience: React.FC = () => {
     return colors[color as keyof typeof colors] || colors.blue;
   };
 
-  // Gestion des états de chargement et d'erreur
   const isLoading = loadingExp || loadingEng;
   const hasError = errorExp || errorEng;
 
@@ -332,7 +304,6 @@ export const Experience: React.FC = () => {
     return (
      <SectionWrapper id="experience" className="bg-gradient-to-br from-gray-50 to-blue-50/30">
       <div className="container mx-auto px-4 py-20">
-        {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             Mon Expérience
@@ -342,21 +313,19 @@ export const Experience: React.FC = () => {
           </p>
         </div>
 
-        {/* Tabs */}
         <div className="flex justify-center mb-12">
           <div className="bg-white rounded-2xl p-2 shadow-lg border border-gray-200">
-            <button className="flex items-center space-x-2 px-6 py-3 rounded-xl font-medium bg-blue-600 text-white shadow-lg">
+            <button className="flex cursor-pointer items-center space-x-2 px-6 py-3 rounded-xl font-medium bg-blue-600 text-white shadow-lg">
               <Briefcase className="w-5 h-5" />
               <span>Expérience Professionnelle</span>
             </button>
-            <button className="flex items-center space-x-2 px-6 py-3 rounded-xl font-medium text-gray-600">
+            <button className="flex items-center cursor-pointer space-x-2 px-6 py-3 rounded-xl font-medium text-gray-600">
               <Heart className="w-5 h-5" />
               <span>Engagement Associatif</span>
             </button>
           </div>
         </div>
 
-        {/* Skeleton Loading */}
         <ExperienceSkeleton />
       </div>
     </SectionWrapper>
@@ -385,13 +354,7 @@ export const Experience: React.FC = () => {
     <SectionWrapper id="experience" className="bg-gradient-to-br from-gray-50 to-blue-50/30">
       <div className="container mx-auto px-4 py-20">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16 opacity-0 translate-y-8 animate-[fadeInUp_0.8s_ease-out_forwards]">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             Mon Expérience
           </h2>
@@ -399,16 +362,10 @@ export const Experience: React.FC = () => {
             Un parcours riche entre développement technique, pédagogie et engagement associatif, 
             forgé par la passion d'apprendre et de contribuer.
           </p>
-        </motion.div>
+        </div>
 
         {/* Tabs */}
-        <motion.div 
-          className="flex justify-center mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
+        <div className="flex justify-center mb-12 opacity-0 translate-y-5 animate-[fadeInUp_0.6s_ease-out_0.2s_forwards]">
           <div className="bg-white rounded-2xl p-2 shadow-lg border border-gray-200">
             <button
               onClick={() => setActiveTab('professional')}
@@ -433,26 +390,18 @@ export const Experience: React.FC = () => {
               <span>Engagement Associatif</span>
             </button>
           </div>
-        </motion.div>
+        </div>
 
         {/* Professional Experience */}
         {activeTab === 'professional' && (
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
+          <div className="space-y-8">
             {professionalExperiences.map((exp, index) => {
               const colors = getColorClasses(exp.color);
               return (
-                <motion.div
+                <div
                   key={exp.id}
-                  variants={itemVariants}
-                  transition={{ duration: 0.6, ease: [0.04, 0.62, 0.23, 0.98] }}
-                  className={`relative ${colors.bg} ${colors.border} border-2 rounded-3xl p-8 hover:shadow-xl transition-all duration-300 group`}
-                  whileHover={{ y: -5 }}
+                  style={{ animationDelay: `${index * 0.15}s` }}
+                  className={`relative ${colors.bg} ${colors.border} border-2 rounded-3xl p-8 hover:shadow-xl transition-all duration-300 group opacity-0 translate-y-12 animate-[fadeInUp_0.6s_ease-out_forwards] hover:-translate-y-1`}
                 >
                   {/* Timeline connector */}
                   {index < professionalExperiences.length - 1 && (
@@ -476,7 +425,7 @@ export const Experience: React.FC = () => {
                       {/* Header */}
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div>
-                          <h3 className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                          <h3 className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
                             {exp.role}
                           </h3>
                           <div className="flex items-center space-x-4 mt-2">
@@ -495,16 +444,14 @@ export const Experience: React.FC = () => {
                             {exp.type}
                           </span>
                           {exp.website && (
-                            <motion.a
+                            <a
                               href={exp.website}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="p-2 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-gray-600 hover:text-blue-600"
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.95 }}
+                              className="p-2 bg-white rounded-lg shadow-md hover:shadow-lg hover:scale-110 active:scale-95 transition-all duration-300 text-gray-600 hover:text-blue-600"
                             >
                               <ExternalLink className="w-4 h-4" />
-                            </motion.a>
+                            </a>
                           )}
                         </div>
                       </div>
@@ -523,17 +470,14 @@ export const Experience: React.FC = () => {
                           </h4>
                           <ul className="space-y-2">
                             {exp.achievements.map((achievement, achIndex) => (
-                              <motion.li 
+                              <li 
                                 key={achIndex}
-                                className="flex items-start space-x-3 text-gray-600"
-                                initial={{ opacity: 0, x: -20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.4, delay: achIndex * 0.1 }}
-                                viewport={{ once: true }}
+                                style={{ animationDelay: `${achIndex * 0.1}s` }}
+                                className="flex items-start space-x-3 text-gray-600 opacity-0 -translate-x-5 animate-[slideInLeft_0.4s_ease-out_forwards]"
                               >
                                 <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
                                 <span>{achievement}</span>
-                              </motion.li>
+                              </li>
                             ))}
                           </ul>
                         </div>
@@ -543,45 +487,34 @@ export const Experience: React.FC = () => {
                       {exp.technologies.length > 0 && (
                         <div className="flex flex-wrap gap-2">
                           {exp.technologies.map((tech, techIndex) => (
-                            <motion.span
+                            <span
                               key={techIndex}
-                              className="px-3 py-1 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-700 hover:border-blue-300 hover:text-blue-600 transition-colors"
-                              whileHover={{ scale: 1.05 }}
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              whileInView={{ opacity: 1, scale: 1 }}
-                              transition={{ duration: 0.3, delay: techIndex * 0.05 }}
-                              viewport={{ once: true }}
+                              style={{ animationDelay: `${techIndex * 0.05}s` }}
+                              className="px-3 py-1 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-700 hover:border-blue-300 hover:text-blue-600 hover:scale-105 transition-all duration-300 opacity-0 scale-80 animate-[scaleIn_0.3s_ease-out_forwards]"
                             >
                               {tech}
-                            </motion.span>
+                            </span>
                           ))}
                         </div>
                       )}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
-          </motion.div>
+          </div>
         )}
 
         {/* Associative Experience */}
         {activeTab === 'associative' && (
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
+          <div className="space-y-8">
             {associativeExperiences.map((exp, index) => {
               const colors = getColorClasses(exp.color);
               return (
-                <motion.div
+                <div
                   key={exp.id}
-                  variants={itemVariants}
-                  className={`relative ${colors.bg} ${colors.border} border-2 rounded-3xl p-8 hover:shadow-xl transition-all duration-300 group`}
-                  whileHover={{ y: -5 }}
+                  style={{ animationDelay: `${index * 0.15}s` }}
+                  className={`relative ${colors.bg} ${colors.border} border-2 rounded-3xl p-8 hover:shadow-xl transition-all duration-300 group opacity-0 translate-y-12 animate-[fadeInUp_0.6s_ease-out_forwards] hover:-translate-y-1`}
                 >
                   {/* Timeline connector */}
                   {index < associativeExperiences.length - 1 && (
@@ -604,7 +537,7 @@ export const Experience: React.FC = () => {
                     <div className="flex-1 space-y-4">
                       {/* Header */}
                       <div>
-                        <h3 className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                        <h3 className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
                           {exp.role}
                         </h3>
                         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-2">
@@ -640,17 +573,14 @@ export const Experience: React.FC = () => {
                           </h4>
                           <ul className="space-y-2">
                             {exp.achievements.map((achievement, achIndex) => (
-                              <motion.li 
+                              <li 
                                 key={achIndex}
-                                className="flex items-start space-x-3 text-gray-600"
-                                initial={{ opacity: 0, x: -20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.4, delay: achIndex * 0.1 }}
-                                viewport={{ once: true }}
+                                style={{ animationDelay: `${achIndex * 0.1}s` }}
+                                className="flex items-start space-x-3 text-gray-600 opacity-0 -translate-x-5 animate-[slideInLeft_0.4s_ease-out_forwards]"
                               >
                                 <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
                                 <span>{achievement}</span>
-                              </motion.li>
+                              </li>
                             ))}
                           </ul>
                         </div>
@@ -660,65 +590,47 @@ export const Experience: React.FC = () => {
                       {exp.skills.length > 0 && (
                         <div className="flex flex-wrap gap-2">
                           {exp.skills.map((skill, skillIndex) => (
-                            <motion.span
+                            <span
                               key={skillIndex}
-                              className="px-3 py-1 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-700 hover:border-blue-300 hover:text-blue-600 transition-colors"
-                              whileHover={{ scale: 1.05 }}
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              whileInView={{ opacity: 1, scale: 1 }}
-                              transition={{ duration: 0.3, delay: skillIndex * 0.05 }}
-                              viewport={{ once: true }}
+                              style={{ animationDelay: `${skillIndex * 0.05}s` }}
+                              className="px-3 py-1 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-700 hover:border-blue-300 hover:text-blue-600 hover:scale-105 transition-all duration-300 opacity-0 scale-80 animate-[scaleIn_0.3s_ease-out_forwards]"
                             >
                               {skill}
-                            </motion.span>
+                            </span>
                           ))}
                         </div>
                       )}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
-          </motion.div>
+          </div>
         )}
 
         {/* Empty states */}
         {activeTab === 'professional' && professionalExperiences.length === 0 && !isLoading && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-16"
-          >
+          <div className="text-center py-16 opacity-0 animate-[fadeIn_1s_ease-out_forwards]">
             <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Briefcase className="w-8 h-8 text-gray-400" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">Aucune expérience professionnelle</h3>
             <p className="text-gray-600">Les expériences professionnelles s'afficheront ici.</p>
-          </motion.div>
+          </div>
         )}
 
         {activeTab === 'associative' && associativeExperiences.length === 0 && !isLoading && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-16"
-          >
+          <div className="text-center py-16 opacity-0 animate-[fadeIn_1s_ease-out_forwards]">
             <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Heart className="w-8 h-8 text-gray-400" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">Aucun engagement associatif</h3>
             <p className="text-gray-600">Les engagements associatifs s'afficheront ici.</p>
-          </motion.div>
+          </div>
         )}
 
         {/* Call to Action */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mt-16 p-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl text-white"
-        >
+        <div className="text-center mt-16 p-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl text-white opacity-0 translate-y-8 animate-[fadeInUp_0.8s_ease-out_0.4s_forwards]">
           <h3 className="text-2xl font-bold mb-4">
             Intéressé par mon profil ?
           </h3>
@@ -726,16 +638,59 @@ export const Experience: React.FC = () => {
             Je suis toujours ouvert aux nouvelles opportunités et collaborations. 
             N'hésitez pas à me contacter pour discuter de vos projets !
           </p>
-          <motion.button
-            className="px-8 py-3 bg-white text-blue-600 rounded-xl font-medium hover:shadow-lg transition-all duration-300"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <button
+            className="px-8 py-3 cursor-pointer bg-white text-blue-600 rounded-xl font-medium hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-300"
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
           >
             Me contacter
-          </motion.button>
-        </motion.div>
+          </button>
+        </div>
       </div>
+
+      {/* Animations CSS personnalisées */}
+      <style jsx>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(3rem);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes slideInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-1.25rem);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes scaleIn {
+          from {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      `}</style>
     </SectionWrapper>
   );
 };

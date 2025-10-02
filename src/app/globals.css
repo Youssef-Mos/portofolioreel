@@ -207,13 +207,25 @@ body {
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
+          0% {
+            background-position: -200% 0;
+          }
+          100% {
+            background-position: 200% 0;
+          }
+        }
+        
+        .animate-shimmer {
+          animation: shimmer 2s infinite linear;
+        }
+        
+        .delay-75 {
+          animation-delay: 75ms;
+        }
+        
+        .delay-150 {
+          animation-delay: 150ms;
+        }
 
 .animate-blob {
   animation: blob 7s infinite;
