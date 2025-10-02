@@ -12,6 +12,8 @@ import {
   Calendar,
   Users,
   Loader2,
+  Github,
+  Play,
   FileText
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -27,6 +29,8 @@ interface Project {
   endDate: string | null
   favorite: boolean
   logoUrl: string | null
+  githubUrl: string | null
+  testProject: boolean
   technologies: {
     id: string
     name: string
@@ -263,6 +267,35 @@ export function ProjectsTable() {
                   
                   <td className="py-4 px-4">
                     <div className="flex items-center justify-end space-x-2">
+                      {/* Bouton Test Project */}
+                      {project.testProject && (
+                        <Link href={`/projets/${project.slug}`} target="_blank">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="flex items-center space-x-1 text-green-600 hover:text-green-700 hover:border-green-300"
+                            title="Tester le projet"
+                          >
+                            <Play className="w-4 h-4" />
+                          </Button>
+                        </Link>
+                      )}
+
+                      {/* Bouton GitHub */}
+                      {project.githubUrl && (
+                        <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="flex items-center space-x-1 hover:bg-gray-900 hover:text-white hover:border-gray-900"
+                            title="Voir sur GitHub"
+                          >
+                            <Github className="w-4 h-4" />
+                          </Button>
+                        </Link>
+                      )}
+
+                      {/* Bouton Voir */}
                       <Link href={`/projets/${project.slug}`} target="_blank">
                         <Button
                           variant="outline"
@@ -274,6 +307,7 @@ export function ProjectsTable() {
                         </Button>
                       </Link>
                       
+                      {/* Bouton Modifier */}
                       <Link href={`/admin/projets/${project.id}/modifier`}>
                         <Button
                           variant="outline"
@@ -285,6 +319,7 @@ export function ProjectsTable() {
                         </Button>
                       </Link>
                       
+                      {/* Bouton Supprimer */}
                       <Button
                         variant="outline"
                         size="sm"

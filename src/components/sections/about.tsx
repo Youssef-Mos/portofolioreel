@@ -34,6 +34,7 @@ import {
   Medal,
   TrendingUp
 } from 'lucide-react';
+import { AboutSkeleton } from '../skeletons/AboutSkeleton';
 
 interface SoftSkill {
   name: string;
@@ -499,17 +500,21 @@ export const About: React.FC = () => {
 
   if (loadingStats || loadingTech) {
     return (
-      <SectionWrapper id="about" className="bg-gradient-to-br from-blue-50/50 via-white/80 to-purple-50/50">
-        <div className="container mx-auto px-4 py-20">
-          <div className="flex items-center justify-center min-h-[400px]">
-            <div className="text-center">
-              <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
-              <p className="text-gray-600">Chargement des informations...</p>
-            </div>
-          </div>
+       <SectionWrapper id="about" className="bg-gradient-to-br from-blue-50/50 via-white/80 to-purple-50/50">
+      <div className="container mx-auto px-4 py-20">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">À propos de moi</h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Passionné par la technologie et l'innovation
+          </p>
         </div>
-      </SectionWrapper>
-    );
+
+        {/* Skeleton Loading */}
+        <AboutSkeleton />
+      </div>
+    </SectionWrapper>
+  );
   }
 
   return (

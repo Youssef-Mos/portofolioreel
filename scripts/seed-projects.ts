@@ -145,6 +145,228 @@ const projectsData = [
       'Optimisation des performances',
       'Intégration avec les systèmes existants'
     ]
+  },
+  // NOUVEAUX PROJETS DU STAGE
+  {
+    id: 6,
+    title: "Système de Reporting Automatisé IXI",
+    description: "Développement et gestion d'un système de reporting journalier, hebdomadaire et mensuel pour le groupe IXI.",
+    longDescription: "Mise en place d'un système complet de reporting multi-niveau (journalier, hebdomadaire, mensuel et semestriel) regroupant des données clés sur l'ensemble des activités du groupe IXI. Les rapports sont destinés à plusieurs départements internes et aux compagnies partenaires, permettant un suivi quotidien des indicateurs de performance.",
+    category: 'data-science',
+    technologies: ['SQL', 'Power BI', 'Excel', 'Data Analysis', 'ETL', 'Reporting'],
+    teamSize: 1,
+    duration: '1 mois',
+    year: '2025',
+    featured: true,
+    status: 'completed',
+    image: '/projects/reporting-ixi.jpg',
+    highlights: [
+      'Reporting journalier IXI Global et Réseau Qualité V5',
+      'Traitement de rapports hebdomadaires multi-compagnies',
+      'Gestion des reporting mensuels et semestriels',
+      'Extraction et transformation de données via SQL',
+      'Actualisation automatique des dashboards Power BI',
+      'Coordination avec IXI-REP pour analyses spécifiques'
+    ],
+    challenges: [
+      'Adaptation aux différents processus par compagnie',
+      'Gestion des saisies manuelles chronophages',
+      'Coordination avec multiples départements'
+    ]
+  },
+  {
+    id: 7,
+    title: "Dashboard Power BI Commercial",
+    description: "Tableau de bord interactif pour le suivi commercial avec système de prévision intégré.",
+    longDescription: "Projet majeur visant à offrir un tableau de bord complet pour suivre les KPI globaux, analyser la performance par client et par région, et détecter les clients à relancer. Intégration d'une fonctionnalité de prévision commerciale basée sur l'historique avec différents scénarios (optimiste, réaliste, pessimiste).",
+    category: 'data-science',
+    technologies: ['Power BI', 'DAX', 'Excel', 'SQL', 'Data Visualization', 'Predictive Analytics'],
+    teamSize: 1,
+    duration: '1 mois',
+    year: '2025',
+    featured: true,
+    status: 'completed',
+    image: '/projects/dashboard-commercial.jpg',
+    highlights: [
+      'KPI globaux avec analyse multi-dimensionnelle',
+      'Système de prévision commerciale avec régression linéaire',
+      'Détection automatique des clients à relancer',
+      'Analyse de performance par région et par client',
+      'Scénarios de projection (optimiste/réaliste/pessimiste)',
+      'Interface interactive et intuitive'
+    ],
+    challenges: [
+      'Communication complexe avec le secteur commercial',
+      'Nombreuses modifications pendant le développement',
+      'Implémentation de prédictions avec DAX uniquement',
+      'Limitation des outils pour l\'analyse prédictive'
+    ]
+  },
+  {
+    id: 8,
+    title: "Rapport PALM - Gestion des Compétences",
+    description: "Outil de centralisation des compétences et parcours des collaborateurs du groupe IXI.",
+    longDescription: "Développement d'un rapport Power BI permettant de centraliser et visualiser les compétences et parcours professionnels des collaborateurs. Le système comprend deux parties majeures : la gestion des compétences (cartes IRD, Construction, spécialités) et le suivi des études (diplômes, formations) avec cartographies et graphiques synthétiques.",
+    category: 'data-science',
+    technologies: ['Power BI', 'Excel', 'Data Cleaning', 'ETL', 'Data Visualization'],
+    teamSize: 1,
+    duration: '1 mois',
+    year: '2025',
+    featured: false,
+    status: 'completed',
+    image: '/projects/rapport-palm.jpg',
+    highlights: [
+      'Centralisation des compétences collaborateurs',
+      'Cartes IRD et Construction interactives',
+      'Suivi des parcours professionnels et ancienneté',
+      'Cartographie des diplômes et formations',
+      'Visualisations synthétiques par département',
+      'Système de recherche par spécialité'
+    ],
+    challenges: [
+      'Nettoyage intensif de la base de données Excel',
+      'Restructuration complète des données non structurées',
+      'Aplatissement et normalisation du fichier source'
+    ]
+  },
+  {
+    id: 9,
+    title: "Rapport Carte Algo - Cartographie des Interventions",
+    description: "Visualisation géographique des zones d'intervention des experts avec analyse comparative.",
+    longDescription: "Développement d'un rapport Power BI pour représenter géographiquement les zones d'intervention des experts du groupe et comparer ces zones avec les informations présentes dans leurs chartes. Le projet visait à assurer la cohérence entre les périmètres d'intervention déclarés et réels.",
+    category: 'data-science',
+    technologies: ['Power BI', 'Cartographie', 'Data Visualization', 'Geospatial Analysis'],
+    teamSize: 1,
+    duration: '1 mois',
+    year: '2025',
+    featured: false,
+    status: 'in-progress',
+    image: '/projects/carte-algo.jpg',
+    highlights: [
+      'Cartographie interactive des zones d\'intervention',
+      'Comparaison automatique avec les chartes experts',
+      'Visualisation géographique des données',
+      'Interface de navigation intuitive',
+      'Analyse de cohérence territoriale'
+    ],
+    challenges: [
+      'Compréhension initiale des objectifs du projet',
+      'Clarification des exigences métier',
+      'Projet interrompu pour priorités d\'automatisation'
+    ]
+  },
+  {
+    id: 10,
+    title: "Automatisation Reporting Journalier",
+    description: "Automatisation complète du processus de mise à jour des rapports quotidiens via Power Automate.",
+    longDescription: "Projet d'automatisation en collaboration avec l'équipe IT pour éliminer les tâches manuelles de mise à jour des rapports journaliers. Exploration de solutions Python et Power Automate, avec implémentation finale via Power Automate pour simuler les actions utilisateur et actualiser automatiquement les dashboards Power BI.",
+    category: 'automation',
+    technologies: ['Power Automate', 'Python', 'SQL', 'Power BI', 'RPA'],
+    teamSize: 2,
+    duration: '1 mois',
+    year: '2025',
+    featured: true,
+    status: 'completed',
+    image: '/projects/automation-reporting.jpg',
+    highlights: [
+      'Automatisation complète du workflow journalier',
+      'Élimination des tâches manuelles répétitives',
+      'Simulation d\'interface via Power Automate',
+      'Exploration de solutions Python alternatives',
+      'Intégration avec Power BI et SQL',
+      'Gain de temps significatif pour l\'équipe'
+    ],
+    challenges: [
+      'Problèmes de format Excel avec scripts Python',
+      'Incompatibilité des bibliothèques Python avec Power BI',
+      'Bugs résiduels à résoudre pour autonomie 100%'
+    ]
+  },
+  {
+    id: 11,
+    title: "Automatisation des Chartes - Yousign",
+    description: "Système automatisé de génération et signature électronique des chartes experts via Python et Yousign API.",
+    longDescription: "Développement complet d'un système d'automatisation des chartes en Python : publipostage automatique depuis template Word, alimentation par données Excel, conversion en PDF, et intégration avec l'API Yousign pour signatures électroniques. Solution complète de bout en bout éliminant toutes les étapes manuelles.",
+    category: 'automation',
+    technologies: ['Python', 'Yousign API', 'Word Automation', 'PDF Processing', 'Excel Integration'],
+    teamSize: 2,
+    duration: '1 mois',
+    year: '2025',
+    featured: true,
+    status: 'completed',
+    image: '/projects/automation-chartes.jpg',
+    highlights: [
+      'Publipostage automatique depuis template Word',
+      'Liaison dynamique Excel-Word via balises',
+      'Conversion automatique en PDF',
+      'Intégration API Yousign pour signatures électroniques',
+      'Élimination complète du processus manuel',
+      'Code Python robuste et maintenable'
+    ],
+    challenges: [
+      'Préservation de la mise en page lors du balisage',
+      'Système de balisage automatique Yousign non fonctionnel',
+      'Placement manuel des coordonnées de signature',
+      'Limitation de l\'automatisation complète'
+    ]
+  },
+  {
+    id: 12,
+    title: "Automatisation Export Power BI Commercial",
+    description: "Automatisation de l'extraction et intégration de tableaux Power BI vers Excel pour le secteur commercial.",
+    longDescription: "Projet visant à automatiser l'actualisation hebdomadaire de tableaux spécifiques du rapport commercial. Le processus extrait automatiquement les visualisations depuis Power BI vers Excel et les intègre dans les templates dédiés, éliminant les manipulations manuelles hebdomadaires.",
+    category: 'automation',
+    technologies: ['Power BI', 'Python', 'Excel', 'Power Automate', 'Data Export'],
+    teamSize: 1,
+    duration: '1 mois',
+    year: '2025',
+    featured: false,
+    status: 'in-progress',
+    image: '/projects/automation-export.jpg',
+    highlights: [
+      'Extraction automatique de tableaux Power BI',
+      'Intégration dans templates Excel prédéfinis',
+      'Élimination des copier-coller manuels',
+      'Actualisation hebdomadaire automatisée',
+      'Gain de temps pour le secteur commercial'
+    ],
+    challenges: [
+      'Format brut complexe lors de l\'exportation Power BI',
+      'Automatisation des opérations manuelles',
+      'Projet non finalisé avant fin du stage'
+    ]
+  },
+  {
+    id: 13,
+    title: "Portfolio Personnel Interactif",
+    description: "Portfolio en ligne moderne avec interface admin pour gérer dynamiquement projets et expériences.",
+    longDescription: "Développement complet d'un portfolio personnel avec Next.js 15, NextAuth pour l'authentification, Prisma comme ORM, et Tailwind CSS 4. Le portfolio comprend une interface publique moderne et un panel d'administration complet permettant de gérer les projets, expériences professionnelles, compétences et contenus de manière dynamique.",
+    category: 'web',
+    technologies: ['Next.js 15', 'NextAuth', 'Prisma', 'Tailwind CSS 4', 'TypeScript', 'PostgreSQL', 'Shadcn/ui', 'Framer Motion'],
+    teamSize: 1,
+    duration: '1 mois',
+    year: '2025',
+    featured: true,
+    status: 'in-progress',
+    githubUrl: 'https://github.com/youssef-mos/portfolio',
+    image: '/projects/portfolio.jpg',
+    highlights: [
+      'Interface publique moderne et responsive',
+      'Panel d\'administration complet et sécurisé',
+      'Gestion dynamique des projets et expériences',
+      'Authentification sécurisée avec NextAuth',
+      'Base de données Prisma avec PostgreSQL',
+      'Design épuré avec Tailwind CSS 4',
+      'Animations fluides avec Framer Motion',
+      'Composants UI modernes avec Shadcn/ui',
+      'Architecture Next.js 15 optimisée'
+    ],
+    challenges: [
+      'Mise en place de l\'architecture complète',
+      'Intégration de NextAuth avec Prisma',
+      'Design responsive et moderne',
+      'Gestion des états et performances'
+    ]
   }
 ];
 
@@ -189,7 +411,8 @@ const categoryMapping: Record<string, string> = {
   'web': 'Web Development',
   'data-science': 'Data Science',
   'ai': 'Artificial Intelligence', 
-  'game': 'Game Development'
+  'game': 'Game Development',
+  'automation': 'Automation'
 };
 
 async function seedProjects() {
@@ -210,16 +433,22 @@ async function seedProjects() {
     for (const techName of allTechnologies) {
       // Déterminer la catégorie de la technologie
       let category = 'Other';
-      if (['React', 'Next.js', 'Vue', 'Angular', 'JavaScript', 'TypeScript', 'HTML5 Canvas', 'CSS3', 'Tailwind CSS'].includes(techName)) {
+      if (['React', 'Next.js', 'Next.js 15', 'Vue', 'Angular', 'JavaScript', 'TypeScript', 'HTML5 Canvas', 'CSS3', 'Tailwind CSS', 'Tailwind CSS 4', 'Shadcn/ui', 'Framer Motion'].includes(techName)) {
         category = 'Web Development';
-      } else if (['Python', 'NumPy', 'Matplotlib', 'Pandas', 'Scikit-learn'].includes(techName)) {
+      } else if (['Python', 'NumPy', 'Matplotlib', 'Pandas', 'Scikit-learn', 'SQL', 'Excel', 'Data Analysis', 'ETL', 'Data Cleaning', 'Data Visualization', 'Reporting', 'Geospatial Analysis', 'Predictive Analytics'].includes(techName)) {
         category = 'Data Science';
       } else if (['Machine Learning', 'Deep Learning', 'PyTorch', 'Computer Vision', 'NLP'].includes(techName)) {
         category = 'Artificial Intelligence';
-      } else if (['Node.js', 'WebSocket'].includes(techName)) {
+      } else if (['Node.js', 'WebSocket', 'PostgreSQL', 'Prisma', 'NextAuth'].includes(techName)) {
         category = 'Backend';
       } else if (['Game Logic'].includes(techName)) {
         category = 'Game Development';
+      } else if (['Power BI', 'DAX', 'Cartographie'].includes(techName)) {
+        category = 'Business Intelligence';
+      } else if (['Power Automate', 'RPA', 'Word Automation', 'PDF Processing', 'Excel Integration', 'Yousign API', 'Data Export'].includes(techName)) {
+        category = 'Automation';
+      } else if (['UX/UI Design', 'SEO'].includes(techName)) {
+        category = 'Design';
       }
 
       const technology = await prisma.technology.upsert({
