@@ -74,6 +74,48 @@ const experiencesData = [
 const engagementsData = [
   {
     title: "Responsable Communication",
+    place: "Weski - Comité Ski",
+    kind: "VOLUNTEER" as const,
+    description: "Comité d'organisation de la sortie ski annuelle pour l'année 2024-2025. Gestion complète de la stratégie de communication et création de contenu multimédia.",
+    period: "Septembre 2024 - Mars 2025",
+    location: "Douai",
+    durationMonths: 7,
+    startDate: new Date(2024, 8, 1), // Septembre 2024
+    endDate: new Date(2025, 2, 31), // Mars 2025
+    keyAchievements: [
+      "Réalisation du film de révélation de la destination ski",
+      "Gestion complète de la communication sur les réseaux sociaux",
+      "Création de contenus visuels et vidéos promotionnelles",
+      "Développement de supports digitaux pour l'événement",
+      "Coordination avec l'équipe d'organisation",
+      "Animation de la communauté et engagement des participants"
+    ],
+    skills: ["Communication", "Vidéo", "Réseaux sociaux", "Marketing", "Création de contenu", "Web Development"],
+    featured: true
+  },
+  {
+    title: "Membre Pôle Animation",
+    place: "BDE IMT Nord Europe",
+    kind: "VOLUNTEER" as const,
+    description: "Bureau Des Étudiants - Pôle Animation. Rejoins en cours d'année pour participer à l'organisation d'activités et de sorties pour les étudiants de l'école.",
+    period: "Janvier 2024 - Juin 2024",
+    location: "Douai",
+    durationMonths: 6,
+    startDate: new Date(2024, 0, 1), // Janvier 2024
+    endDate: new Date(2024, 5, 30), // Juin 2024
+    keyAchievements: [
+      "Organisation d'activités et événements étudiants",
+      "Planification et coordination de sorties collectives",
+      "Développement de solutions digitales pour la gestion des événements",
+      "Animation de la vie étudiante",
+      "Gestion logistique des activités",
+      "Contribution au développement d'outils numériques pour le BDE"
+    ],
+    skills: ["Organisation", "Événementiel", "Animation", "Logistique", "Web Development", "Travail d'équipe"],
+    featured: true
+  },
+  {
+    title: "Responsable Communication",
     place: "Sport Pour Tous (SPT)",
     kind: "VOLUNTEER" as const,
     description: "Projet multifacette comprenant la conception d'un objet pour le basket fauteuil, une journée événementielle et une partie pédagogique - Projet Ouvert Basket Fauteuil.",
@@ -91,7 +133,7 @@ const engagementsData = [
       "Développement de la stratégie de communication digitale"
     ],
     skills: ["Communication", "Design graphique", "Réseaux sociaux", "Événementiel"],
-    featured: true
+    featured: false
   },
   {
     title: "Bénévole - Aide alimentaire",
@@ -165,8 +207,9 @@ const technologyMapping: Record<string, string> = {
   'TypeScript': 'Programming',
   'Tailwind CSS': 'Web Development',
   'UX/UI Design': 'Design',
+  'Web Development': 'Web Development',
   
-  // Soft Skills
+  // Soft Skills & Communication
   'Pédagogie': 'Education',
   'Communication': 'Soft Skills',
   'Management': 'Leadership',
@@ -179,7 +222,14 @@ const technologyMapping: Record<string, string> = {
   'Contact humain': 'Soft Skills',
   'Logistique': 'Operations',
   'Santé publique': 'Healthcare',
-  'Empathie': 'Soft Skills'
+  'Empathie': 'Soft Skills',
+  
+  // Nouvelles compétences
+  'Vidéo': 'Media Production',
+  'Marketing': 'Marketing',
+  'Création de contenu': 'Content Creation',
+  'Animation': 'Event Management',
+  'Travail d\'équipe': 'Soft Skills'
 };
 
 async function seedExperiencesAndEngagements() {

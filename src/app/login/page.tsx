@@ -5,10 +5,11 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signIn } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Eye, EyeOff, Lock, Mail, ArrowRight, Sparkles } from "lucide-react"
+import { Eye, EyeOff, Lock, Mail, ArrowRight, Sparkles, Home, ArrowLeft } from "lucide-react"
 
 const schema = z.object({
   email: z.string().email("Veuillez entrer un email valide"),
@@ -44,6 +45,15 @@ function LoginForm() {
 
   return (
     <div className="w-full max-w-md mx-auto">
+      {/* Bouton retour accueil */}
+      <Link
+        href="/"
+        className="inline-flex items-center gap-2 px-4 py-2 mb-8 bg-white/80 backdrop-blur-sm hover:bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 group"
+      >
+        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+        <span className="text-sm font-medium text-gray-700">Retour à l'accueil</span>
+      </Link>
+
       {/* Header avec animation */}
       <div className="text-center mb-8 space-y-4">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 mb-4 shadow-lg animate-pulse">

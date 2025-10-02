@@ -1,16 +1,35 @@
 // components/sections/Hero.tsx
 "use client";
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { SectionWrapper } from '../ui/SectionWrapper';
-import { ArrowDown, Download, Github, Linkedin, Mail } from 'lucide-react';
+import { ArrowDown, Download, Github, Linkedin, Mail, ChevronDown, Briefcase, FileText } from 'lucide-react';
 
 export const Hero: React.FC = () => {
+  const [showCVOptions, setShowCVOptions] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Fermer le dropdown si on clique en dehors
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowCVOptions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleDownloadCV = (type: 'financier' | 'classique') => {
+    // Logique de téléchargement du CV
+    const cvUrl = type === 'financier' ? '/cv-financier.pdf' : '/cv-classique.pdf';
+    window.open(cvUrl, '_blank');
+    setShowCVOptions(false);
+  };
+
   return (
     <SectionWrapper id="home" className="relative bg-gradient-to-br from-blue-50/30 via-transparent to-purple-50/30">
-      {/* Background decorative elements */}
-      
-
       <div className="container mx-auto px-4 h-full flex items-center justify-center relative z-10">
         <div className="text-center space-y-12 max-w-5xl">
           {/* Profile Section */}
@@ -76,14 +95,82 @@ export const Hero: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              <motion.button 
-                className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-3"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Download className="w-5 h-5 group-hover:animate-bounce" />
-                <span>Télécharger CV</span>
-              </motion.button>
+              {/* CV Dropdown Button */}
+              <div className="relative" ref={dropdownRef}>
+                <motion.button 
+                  onClick={() => setShowCVOptions(!showCVOptions)}
+                  className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-3"
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Download className="w-5 h-5 group-hover:animate-bounce" />
+                  <span>Télécharger CV</span>
+                  <motion.div
+                    animate={{ rotate: showCVOptions ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ChevronDown className="w-4 h-4" />
+                  </motion.div>
+                </motion.button>
+
+                {/* Dropdown Menu */}
+                <AnimatePresence>
+                  {showCVOptions && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50"
+                    >
+                      {/* Header */}
+                      <div className="bg-gradient-to-r from-blue-50 to-purple-50 px-4 py-3 border-b border-gray-100">
+                        <p className="text-sm font-semibold text-gray-700">Choisissez votre CV</p>
+                      </div>
+
+                      {/* Options */}
+                      <div className="p-2">
+                        <motion.button
+                          onClick={() => handleDownloadCV('financier')}
+                          className="w-full group flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-blue-50 transition-colors duration-200"
+                          whileHover={{ x: 4 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-200">
+                            <Briefcase className="w-5 h-5 text-white" />
+                          </div>
+                          <div className="text-left flex-1">
+                            <p className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">CV Financier</p>
+                            <p className="text-xs text-gray-500">Marchés & Data Science</p>
+                          </div>
+                          <Download className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </motion.button>
+
+                        <motion.button
+                          onClick={() => handleDownloadCV('classique')}
+                          className="w-full group flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-purple-50 transition-colors duration-200"
+                          whileHover={{ x: 4 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-200">
+                            <FileText className="w-5 h-5 text-white" />
+                          </div>
+                          <div className="text-left flex-1">
+                            <p className="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">CV Classique</p>
+                            <p className="text-xs text-gray-500">Full-Stack & Ingénierie</p>
+                          </div>
+                          <Download className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </motion.button>
+                      </div>
+
+                      {/* Footer hint */}
+                      <div className="px-4 py-2 bg-gray-50 border-t border-gray-100">
+                        <p className="text-xs text-gray-500 text-center">Format PDF • Dernière mise à jour</p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
               
               <motion.button 
                 className="group px-8 py-4 bg-white border-2 border-gray-200 text-gray-700 rounded-2xl font-semibold hover:border-blue-500 hover:text-blue-600 transition-all duration-300 flex items-center space-x-3 shadow-md hover:shadow-lg"
@@ -144,18 +231,6 @@ export const Hero: React.FC = () => {
           </motion.div>
         </div>
       </div>
-
-      {/* Custom styles for additional animations */}
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-        
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-      `}</style>
     </SectionWrapper>
   );
 };

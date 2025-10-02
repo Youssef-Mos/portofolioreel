@@ -1,6 +1,6 @@
 "use client";
-import React from 'react';
-import { easeOut, motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { easeOut, motion, AnimatePresence } from 'framer-motion';
 import { SectionWrapper } from '../ui/SectionWrapper';
 import { 
   Mail, 
@@ -13,10 +13,46 @@ import {
   MessageCircle,
   Calendar,
   Globe,
-  Send
+  Send,
+  ChevronDown,
+  FileText,
+  Briefcase
 } from 'lucide-react';
+import router from 'next/router';
 
 export const Contact: React.FC = () => {
+  const [isCvDropdownOpen, setIsCvDropdownOpen] = useState(false);
+
+  const cvOptions = [
+    {
+      id: 'finance',
+      title: 'CV Finance',
+      description: 'Orienté finance et gestion',
+      icon: <Briefcase className="w-4 h-4" />,
+      downloadUrl: '/cv/cv-finance.pdf',
+      fileName: 'Youssef_Mosbah_CV_Finance.pdf'
+    },
+    {
+      id: 'classique',
+      title: 'CV Classique',
+      description: 'Version polyvalente',
+      icon: <FileText className="w-4 h-4" />,
+      downloadUrl: '/cv/cv-classique.pdf',
+      fileName: 'Youssef_Mosbah_CV_Classique.pdf'
+    }
+  ];
+
+  const handleCvDownload = (cv: typeof cvOptions[0]) => {
+    // Logique de téléchargement
+    const link = document.createElement('a');
+    link.href = cv.downloadUrl;
+    link.download = cv.fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setIsCvDropdownOpen(false);
+  };
+
   const contactInfo = [
     {
       icon: <Mail className="w-6 h-6" />,
@@ -65,16 +101,6 @@ export const Contact: React.FC = () => {
 
   const quickActions = [
     {
-      title: "Télécharger mon CV",
-      description: "Version PDF mise à jour",
-      icon: <Download className="w-5 h-5" />,
-      action: () => {
-        // Logique de téléchargement du CV
-        console.log("Téléchargement du CV");
-      },
-      color: "blue"
-    },
-    {
       title: "Me contacter directement",
       description: "Formulaire de contact détaillé",
       icon: <Send className="w-5 h-5" />,
@@ -88,9 +114,9 @@ export const Contact: React.FC = () => {
       description: "Réserver un créneau de discussion",
       icon: <Calendar className="w-5 h-5" />,
       action: () => {
-        // Lien vers calendrier de réservation
-        console.log("Ouverture du calendrier");
+        window.location.href = '/schedule';
       },
+
       color: "green"
     }
   ];
@@ -147,6 +173,8 @@ export const Contact: React.FC = () => {
     return colors[color as keyof typeof colors] || colors.blue;
   };
 
+  const colors = getColorClasses('blue');
+
   return (
     <SectionWrapper id="contact" className="bg-gradient-to-br from-gray-50 to-blue-50/30">
       <div className="container mx-auto px-4 py-20">
@@ -177,19 +205,19 @@ export const Contact: React.FC = () => {
           {/* Informations de contact principales */}
           <motion.div variants={itemVariants} className="grid md:grid-cols-3 gap-8 mb-16">
             {contactInfo.map((info, index) => {
-              const colors = getColorClasses(info.color);
+              const infoColors = getColorClasses(info.color);
               return (
                 <motion.a
                   key={index}
                   href={info.link}
                   target={info.link.startsWith('http') ? '_blank' : '_self'}
                   rel={info.link.startsWith('http') ? 'noopener noreferrer' : ''}
-                  className={`group p-8 ${colors.bg} ${colors.border} border-2 rounded-3xl ${colors.hover} transition-all duration-300 block`}
+                  className={`group p-8 ${infoColors.bg} ${infoColors.border} border-2 rounded-3xl ${infoColors.hover} transition-all duration-300 block`}
                   whileHover={{ y: -5, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <div className="flex flex-col items-center text-center space-y-4">
-                    <div className={`p-4 bg-white rounded-2xl shadow-lg ${colors.icon} group-hover:scale-110 transition-transform duration-300`}>
+                    <div className={`p-4 bg-white rounded-2xl shadow-lg ${infoColors.icon} group-hover:scale-110 transition-transform duration-300`}>
                       {info.icon}
                     </div>
                     <div>
@@ -208,18 +236,88 @@ export const Contact: React.FC = () => {
           <motion.div variants={itemVariants} className="mb-16">
             <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">Actions rapides</h3>
             <div className="grid md:grid-cols-3 gap-6">
+              {/* Dropdown CV avec design amélioré */}
+              <div className="relative">
+                <motion.button
+                  onClick={() => setIsCvDropdownOpen(!isCvDropdownOpen)}
+                  className={`w-full p-6 ${colors.bg} ${colors.border} border-2 rounded-2xl ${colors.hover} transition-all duration-300 text-left group`}
+                  whileHover={{ y: -3 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div className="flex items-start space-x-4">
+                    <div className={`p-3 bg-white rounded-xl ${colors.icon} group-hover:scale-110 transition-transform duration-300`}>
+                      <Download className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-semibold text-gray-900 mb-1">Télécharger mon CV</h4>
+                        <ChevronDown 
+                          className={`w-5 h-5 text-gray-600 transition-transform duration-300 ${
+                            isCvDropdownOpen ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </div>
+                      <p className="text-gray-600 text-sm">Choisir la version</p>
+                    </div>
+                  </div>
+                </motion.button>
+
+                {/* Dropdown Menu */}
+                <AnimatePresence>
+                  {isCvDropdownOpen && (
+                    <>
+                      {/* Overlay pour fermer le dropdown */}
+                      <div 
+                        className="fixed inset-0 z-10"
+                        onClick={() => setIsCvDropdownOpen(false)}
+                      />
+                      
+                      <motion.div
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute top-full left-0 right-0 mt-2 z-20 bg-white rounded-2xl shadow-2xl border-2 border-blue-100 overflow-hidden"
+                      >
+                        {cvOptions.map((cv, index) => (
+                          <motion.button
+                            key={cv.id}
+                            onClick={() => handleCvDownload(cv)}
+                            className="w-full p-4 hover:bg-blue-50 transition-colors duration-200 flex items-center space-x-3 group border-b border-gray-100 last:border-b-0"
+                            whileHover={{ x: 4 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            <div className="p-2 bg-blue-50 rounded-lg text-blue-600 group-hover:bg-blue-100 transition-colors">
+                              {cv.icon}
+                            </div>
+                            <div className="flex-1 text-left">
+                              <div className="font-semibold text-gray-900 flex items-center space-x-2">
+                                <span>{cv.title}</span>
+                                <Download className="w-3 h-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                              </div>
+                              <p className="text-sm text-gray-600">{cv.description}</p>
+                            </div>
+                          </motion.button>
+                        ))}
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Autres actions */}
               {quickActions.map((action, index) => {
-                const colors = getColorClasses(action.color);
+                const actionColors = getColorClasses(action.color);
                 return (
                   <motion.button
                     key={index}
                     onClick={action.action}
-                    className={`p-6 ${colors.bg} ${colors.border} border-2 rounded-2xl ${colors.hover} transition-all duration-300 text-left group`}
+                    className={`p-6 ${actionColors.bg} ${actionColors.border} border-2 rounded-2xl ${actionColors.hover} transition-all duration-300 text-left group`}
                     whileHover={{ y: -3 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     <div className="flex items-start space-x-4">
-                      <div className={`p-3 bg-white rounded-xl ${colors.icon} group-hover:scale-110 transition-transform duration-300`}>
+                      <div className={`p-3 bg-white rounded-xl ${actionColors.icon} group-hover:scale-110 transition-transform duration-300`}>
                         {action.icon}
                       </div>
                       <div className="flex-1">
@@ -238,18 +336,18 @@ export const Contact: React.FC = () => {
             <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">Retrouvez-moi aussi sur</h3>
             <div className="flex justify-center space-x-6">
               {socialLinks.map((social, index) => {
-                const colors = getColorClasses(social.color);
+                const socialColors = getColorClasses(social.color);
                 return (
                   <motion.a
                     key={index}
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`group p-6 ${colors.bg} ${colors.border} border-2 rounded-2xl ${colors.hover} transition-all duration-300 flex flex-col items-center space-y-3 min-w-[200px]`}
+                    className={`group p-6 ${socialColors.bg} ${socialColors.border} border-2 rounded-2xl ${socialColors.hover} transition-all duration-300 flex flex-col items-center space-y-3 min-w-[200px]`}
                     whileHover={{ y: -5, scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <div className={`p-4 bg-white rounded-xl ${colors.icon} group-hover:scale-110 transition-transform duration-300`}>
+                    <div className={`p-4 bg-white rounded-xl ${socialColors.icon} group-hover:scale-110 transition-transform duration-300`}>
                       {social.icon}
                     </div>
                     <div className="text-center">

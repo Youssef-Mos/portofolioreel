@@ -35,6 +35,8 @@ interface ProjectFormData {
   keyPoints: { value: string }[]
   favorite: boolean
   logoUrl?: string
+  githubUrl?: string
+  testProject: boolean
   technologySlugs: { value: string }[]
 }
 
@@ -51,6 +53,8 @@ const projectSchema = z.object({
   keyPoints: z.array(z.object({ value: z.string() })),
   favorite: z.boolean(),
   logoUrl: z.string().optional(),
+  githubUrl: z.string().url("L'URL GitHub doit être valide").optional().or(z.literal("")),
+  testProject: z.boolean(),
   technologySlugs: z.array(z.object({ value: z.string() })),
 })
 
@@ -74,6 +78,8 @@ interface Project {
   keyPoints: string[]
   favorite: boolean
   logoUrl: string | null
+  githubUrl: string | null
+  testProject: boolean
   technologies: Technology[]
 }
 
@@ -112,6 +118,8 @@ export function ProjectForm({ project }: ProjectFormProps) {
         keyPoints: project.keyPoints.map(point => ({ value: point })),
         favorite: project.favorite,
         logoUrl: project.logoUrl || "",
+        githubUrl: project.githubUrl || "",
+        testProject: project.testProject,
         technologySlugs: project.technologies.map(tech => ({ value: tech.slug }))
       }
     }
@@ -128,6 +136,8 @@ export function ProjectForm({ project }: ProjectFormProps) {
       keyPoints: [],
       favorite: false,
       logoUrl: "",
+      githubUrl: "",
+      testProject: false,
       technologySlugs: []
     }
   }
@@ -250,6 +260,8 @@ export function ProjectForm({ project }: ProjectFormProps) {
         keyPoints: data.keyPoints.map(k => k.value).filter(k => k.trim() !== ""),
         favorite: data.favorite,
         logoUrl: data.logoUrl || undefined,
+        githubUrl: data.githubUrl || undefined,
+        testProject: data.testProject,
         technologySlugs: data.technologySlugs.map(t => t.value).filter(t => t !== "")
       }
 
@@ -393,7 +405,7 @@ export function ProjectForm({ project }: ProjectFormProps) {
         </div>
       </div>
 
-      {/* Logo URL et Favori */}
+      {/* Logo URL, GitHub URL et options */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <Label htmlFor="logoUrl">URL du logo (optionnel)</Label>
@@ -405,6 +417,23 @@ export function ProjectForm({ project }: ProjectFormProps) {
           />
         </div>
 
+        <div>
+          <Label htmlFor="githubUrl">URL GitHub (optionnel)</Label>
+          <Input
+            id="githubUrl"
+            type="url"
+            placeholder="https://github.com/username/repo"
+            {...register("githubUrl")}
+            className={errors.githubUrl ? "border-red-300" : ""}
+          />
+          {errors.githubUrl && (
+            <p className="text-sm text-red-600 mt-1">{errors.githubUrl.message}</p>
+          )}
+        </div>
+      </div>
+
+      {/* Options projet */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="flex items-center space-x-2">
           <input
             id="favorite"
@@ -414,6 +443,18 @@ export function ProjectForm({ project }: ProjectFormProps) {
           />
           <Label htmlFor="favorite" className="text-sm font-medium">
             Marquer comme projet favori
+          </Label>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <input
+            id="testProject"
+            type="checkbox"
+            {...register("testProject")}
+            className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+          />
+          <Label htmlFor="testProject" className="text-sm font-medium">
+            Projet testable en ligne
           </Label>
         </div>
       </div>

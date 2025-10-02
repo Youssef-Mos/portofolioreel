@@ -20,6 +20,7 @@ import {
   ChevronLeft,
   ChevronRight as ChevronRightIcon
 } from 'lucide-react';
+import { ProjectsSkeleton } from '../skeletons/ProjectsSkeleton';
 
 // Hook simple qui récupère tous les projets une fois
 function useProjects() {
@@ -55,6 +56,7 @@ function useProjects() {
 interface FormattedProject {
   id: string;
   title: string;
+  slug: string;
   description: string;
   category: string;
   technologies: string[];
@@ -154,6 +156,7 @@ export const Projects: React.FC = () => {
     return {
       id: apiProject.id,
       title: apiProject.title,
+      slug: apiProject.slug,
       description: apiProject.description || '',
       category,
       technologies: apiProject.technologies.map((t: any) => t.name),
@@ -171,6 +174,15 @@ export const Projects: React.FC = () => {
       challenges: apiProject.keyPoints?.filter((p: string) => p.startsWith('Défi:')).map((p: string) => p.replace('Défi: ', '')) || []
     };
   }
+  const truncateText = (text: string, maxLength: number = 50) => {
+  if (!text) return '';
+  if (text.length <= maxLength) return text;
+  
+  const truncated = text.substring(0, maxLength);
+  const lastSpace = truncated.lastIndexOf(' ');
+  
+  return lastSpace > 0 ? `${truncated.substring(0, lastSpace)}...` : `${truncated}...`;
+};
 
   // Filtrage côté client
   const filteredProjects = useMemo(() => {
@@ -280,17 +292,23 @@ export const Projects: React.FC = () => {
   // États de chargement et d'erreur
   if (loading) {
     return (
-      <SectionWrapper id="projects" className="bg-gradient-to-br from-white to-gray-50">
-        <div className="container mx-auto px-4 py-20">
-          <div className="flex items-center justify-center min-h-[400px]">
-            <div className="text-center">
-              <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
-              <p className="text-gray-600">Chargement des projets...</p>
-            </div>
-          </div>
+          <SectionWrapper id="projects" className="bg-gradient-to-br from-white to-gray-50">
+      <div className="container mx-auto px-4 py-20">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            Mes Projets
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Découvrez une sélection de projets sur lesquels j'ai travaillé
+          </p>
         </div>
-      </SectionWrapper>
-    );
+
+        {/* Skeleton Loading */}
+        <ProjectsSkeleton />
+      </div>
+    </SectionWrapper>
+  );
   }
 
   if (error) {
@@ -342,135 +360,158 @@ export const Projects: React.FC = () => {
           />
         </div>
 
-        {/* Grid des projets PAGINES */}
-        <div className="grid lg:grid-cols-2 gap-8">
-          {paginatedProjects.map((project, index) => (
-            <div
-              key={project.id}
-              className={`group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:-translate-y-2 hover:scale-[1.02] cursor-pointer animate-project-card ${
-                isVisible ? 'opacity-100' : 'opacity-0'
-              }`}
-              style={{ animationDelay: `${(index * 0.1) + 0.4}s` }}
-            >
-              {/* Project Header */}
-              <div className="relative p-8 pb-6">
-                {project.featured && (
-                  <div className="absolute top-4 right-4 z-10">
-                    <div className="flex items-center space-x-1 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium animate-pulse-gentle">
-                      <Star className="w-4 h-4" />
-                      <span>Projet phare</span>
-                    </div>
-                  </div>
-                )}
 
-                <div className="mb-4 pr-24">
-                  <div className="flex items-center space-x-4 mb-4">
-                    <div className="p-3 bg-blue-100 rounded-2xl text-blue-600 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300">
-                      {project.icon}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors break-words">
-                        {project.title}
-                      </h3>
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium border ${getCategoryColor(project.category)}`}>
-                      {project.category}
-                    </span>
-                    <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                      Terminé
-                    </span>
-                  </div>
-                </div>
 
-                <p className="text-gray-600 leading-relaxed mb-6">
-                  {project.description}
-                </p>
-
-                {/* Project Meta */}
-                <div className="grid grid-cols-3 gap-4 mb-6">
-                  <div className="flex items-center space-x-2 text-gray-500 group-hover:text-blue-600 transition-colors">
-                    <Users className="w-4 h-4" />
-                    <span className="text-sm">{project.teamSize} personnes</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-gray-500 group-hover:text-blue-600 transition-colors">
-                    <Calendar className="w-4 h-4" />
-                    <span className="text-sm">{getDurationText(project.durationMonths)}</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-gray-500 group-hover:text-blue-600 transition-colors">
-                    <Code className="w-4 h-4" />
-                    <span className="text-sm">{project.year}</span>
-                  </div>
-                </div>
-
-                {/* Technologies */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {project.technologies.slice(0, 4).map((tech, techIndex) => (
-                    <span
-                      key={techIndex}
-                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium hover:bg-blue-100 hover:text-blue-800 hover:scale-105 transition-all duration-300 cursor-pointer"
-                      onClick={() => setFilters(prev => ({ ...prev, technology: tech }))}
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                  {project.technologies.length > 4 && (
-                    <span className="px-3 py-1 bg-gray-100 text-gray-500 rounded-full text-sm">
-                      +{project.technologies.length - 4} autres
-                    </span>
-                  )}
-                </div>
-
-                {/* Highlights */}
-                {project.highlights.length > 0 && (
-                  <div className="space-y-2 mb-6">
-                    <h4 className="font-semibold text-gray-900 flex items-center space-x-2">
-                      <ChevronRight className="w-4 h-4 text-blue-600 group-hover:translate-x-1 transition-transform" />
-                      <span>Points clés</span>
-                    </h4>
-                    <ul className="space-y-1">
-                      {project.highlights.slice(0, 3).map((highlight, index) => (
-                        <li key={index} className="flex items-start space-x-2 text-gray-600 text-sm">
-                          <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
-                          <span>{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {/* Actions */}
-                <div className="flex flex-wrap gap-3">
-                  {project.demoUrl && (
-                    <a
-                      href={project.demoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 hover:scale-105 active:scale-95 transition-all duration-300 group/btn"
-                    >
-                      <Play className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
-                      <span>Voir le projet</span>
-                    </a>
-                  )}
-                  
-                  {project.githubUrl && (
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center space-x-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:border-gray-400 hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all duration-300 group/btn"
-                    >
-                      <Github className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
-                      <span>Code</span>
-                    </a>
-                  )}
-                </div>
-              </div>
+{/* Grid des projets PAGINES - VERSION AVEC HOVER */}
+<div className="grid lg:grid-cols-2 gap-8">
+  {paginatedProjects.map((project, index) => (
+    <div
+      key={project.id}
+      className={`group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:-translate-y-2 hover:scale-[1.02] cursor-pointer animate-project-card ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
+      style={{ animationDelay: `${(index * 0.1) + 0.4}s` }}
+      onClick={() => window.open(`/projets/${project.slug}`, '_blank')} // Redirection vers votre page de détail
+    >
+      {/* Project Header */}
+      <div className="relative p-8 pb-6">
+        {project.featured && (
+          <div className="absolute top-4 right-4 z-10">
+            <div className="flex items-center space-x-1 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium animate-pulse-gentle">
+              <Star className="w-4 h-4" />
+              <span>Projet phare</span>
             </div>
-          ))}
+          </div>
+        )}
+
+        <div className="mb-4 pr-24">
+          <div className="flex items-center space-x-4 mb-4">
+            <div className="p-3 bg-blue-100 rounded-2xl text-blue-600 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300">
+              {project.icon}
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors break-words">
+                {project.title}
+              </h3>
+            </div>
+          </div>
+          
+          <div className="flex flex-wrap items-center gap-2">
+            <span className={`px-3 py-1 rounded-full text-sm font-medium border ${getCategoryColor(project.category)}`}>
+              {project.category}
+            </span>
+            <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+              Terminé
+            </span>
+          </div>
         </div>
+
+        <p className="text-gray-600 leading-relaxed mb-6">
+          {truncateText(project.description, 100)}
+        </p>
+
+        {/* Project Meta */}
+        <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="flex items-center space-x-2 text-gray-500 group-hover:text-blue-600 transition-colors">
+            <Users className="w-4 h-4" />
+            <span className="text-sm">{project.teamSize} personnes</span>
+          </div>
+          <div className="flex items-center space-x-2 text-gray-500 group-hover:text-blue-600 transition-colors">
+            <Calendar className="w-4 h-4" />
+            <span className="text-sm">{getDurationText(project.durationMonths)}</span>
+          </div>
+          <div className="flex items-center space-x-2 text-gray-500 group-hover:text-blue-600 transition-colors">
+            <Code className="w-4 h-4" />
+            <span className="text-sm">{project.year}</span>
+          </div>
+        </div>
+
+        {/* Technologies */}
+        <div className="flex flex-wrap gap-2 mb-6">
+          {project.technologies.slice(0, 4).map((tech, techIndex) => (
+            <span
+              key={techIndex}
+              className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium hover:bg-blue-100 hover:text-blue-800 hover:scale-105 transition-all duration-300 cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation() // Empêche la redirection quand on clique sur une tech
+                setFilters(prev => ({ ...prev, technology: tech }))
+              }}
+            >
+              {tech}
+            </span>
+          ))}
+          {project.technologies.length > 4 && (
+            <span className="px-3 py-1 bg-gray-100 text-gray-500 rounded-full text-sm">
+              +{project.technologies.length - 4} autres
+            </span>
+          )}
+        </div>
+
+        {/* Highlights */}
+        {project.highlights.length > 0 && (
+          <div className="space-y-2 mb-6">
+            <h4 className="font-semibold text-gray-900 flex items-center space-x-2">
+              <ChevronRight className="w-4 h-4 text-blue-600 group-hover:translate-x-1 transition-transform" />
+              <span>Points clés</span>
+            </h4>
+            <ul className="space-y-1">
+              {project.highlights.slice(0, 3).map((highlight, index) => (
+                <li key={index} className="flex items-start space-x-2 text-gray-600 text-sm">
+                  <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
+                  <span>{highlight}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Actions avec effet hover - CETTE PARTIE EST NOUVELLE */}
+        <div className="flex flex-wrap gap-3 mb-4">
+          {project.demoUrl && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                window.open(project.demoUrl, '_blank')
+              }}
+              className="flex items-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 hover:scale-105 active:scale-95 transition-all duration-300 group/btn"
+            >
+              <Play className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
+              <span>Tester</span>
+            </button>
+          )}
+          
+          {project.githubUrl && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                window.open(project.githubUrl, '_blank')
+              }}
+              className="flex items-center space-x-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:border-gray-400 hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all duration-300 group/btn"
+            >
+              <Github className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
+              <span>Code</span>
+            </button>
+          )}
+        </div>
+
+        {/* NOUVEAU : Call to action avec effet hover */}
+        <div className="border-t border-gray-100 pt-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-600 to-purple-600" />
+              <span className="text-sm text-gray-600">Voir le détail</span>
+            </div>
+            
+            {/* Texte qui apparaît au hover - C'EST ÇA QUE VOUS VOULIEZ */}
+            <div className="text-xs font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent transform translate-x-2 group-hover:translate-x-0">
+              Appuyez pour en savoir plus →
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
 
         {/* Pagination */}
         {totalPages > 1 && (

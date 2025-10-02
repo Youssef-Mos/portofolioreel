@@ -12,8 +12,11 @@ import {
   Building2,
   User,
   MessageSquare,
-  Briefcase
+  Briefcase, 
+  Home
 } from 'lucide-react';
+import Link from 'next/link';
+
 import { useRouter } from 'next/navigation';
 
 // Types pour le formulaire
@@ -36,6 +39,7 @@ const ContactPage: React.FC = () => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -85,18 +89,38 @@ const ContactPage: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Gestion de la soumission
+  // Gestion de la soumission avec appel à l'API
   const handleSubmit = async () => {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    setSubmitError(null);
 
-    // Simulation d'envoi (remplacer par vraie logique d'envoi)
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          company: formData.company.trim(),
+          subject: formData.subject,
+          message: formData.message.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erreur lors de l\'envoi du message');
+      }
+
+      // Succès !
       setIsSubmitted(true);
       
-      // Reset form après succès
+      // Reset form après 3 secondes
       setTimeout(() => {
         setFormData({
           name: '',
@@ -106,9 +130,15 @@ const ContactPage: React.FC = () => {
           message: ''
         });
         setIsSubmitted(false);
-      }, 3000);
+      }, 5000);
+
     } catch (error) {
       console.error('Erreur lors de l\'envoi:', error);
+      setSubmitError(
+        error instanceof Error 
+          ? error.message 
+          : 'Une erreur est survenue lors de l\'envoi. Veuillez réessayer.'
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -125,22 +155,30 @@ const ContactPage: React.FC = () => {
         setErrors(prev => ({ ...prev, [errorField]: undefined }));
       }
     }
+
+    // Effacer l'erreur de soumission
+    if (submitError) {
+      setSubmitError(null);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header avec navigation retour */}
-      <div className="container mx-auto px-4 pt-8 pb-4">
-        <motion.button
-          onClick={() => router.back()}
-          className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
-          whileHover={{ x: -5 }}
-          whileTap={{ scale: 0.95 }}
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="fixed top-6 left-6 z-50"
+      >
+        <Link
+          href="/"
+          className="flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm hover:bg-white border border-gray-200/50 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
         >
-          <ArrowLeft className="w-5 h-5" />
-          <span>Retour</span>
-        </motion.button>
-      </div>
+          <Home className="w-4 h-4 text-blue-600 group-hover:scale-110 transition-transform" />
+          <span className="hidden sm:inline text-sm font-medium text-gray-700">Accueil</span>
+        </Link>
+      </motion.div>
+
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
@@ -172,15 +210,20 @@ const ContactPage: React.FC = () => {
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Mes coordonnées</h2>
                 <div className="space-y-4">
                   <motion.div 
-                    className="flex items-center space-x-4 p-4 bg-white rounded-2xl shadow-lg border border-gray-100"
+                    className="flex items-center space-x-4 p-4 bg-white rounded-2xl shadow-lg border border-gray-100 group relative"
                     whileHover={{ scale: 1.02 }}
                   >
                     <div className="p-3 bg-blue-100 rounded-xl">
                       <Mail className="w-6 h-6 text-blue-600" />
                     </div>
-                    <div>
+                    <div className="flex-1 min-w-0">
                       <p className="font-medium text-gray-900">Email</p>
-                      <p className="text-gray-600">youssefmosbah04@gmail.com</p>
+                      <p className="text-gray-600 truncate group-hover:hidden">
+                        youssefmosbah04@gmail.com
+                      </p>
+                      <p className="text-gray-600 hidden group-hover:block break-all">
+                        youssefmosbah04@gmail.com
+                      </p>
                     </div>
                   </motion.div>
 
@@ -243,6 +286,21 @@ const ContactPage: React.FC = () => {
                   </motion.div>
                 ) : (
                   <div className="space-y-6">
+                    {/* Message d'erreur global */}
+                    {submitError && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start space-x-3"
+                      >
+                        <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                        <div className="flex-1">
+                          <p className="text-red-800 font-medium">Erreur d'envoi</p>
+                          <p className="text-red-700 text-sm mt-1">{submitError}</p>
+                        </div>
+                      </motion.div>
+                    )}
+
                     <div className="grid md:grid-cols-2 gap-6">
                       {/* Nom */}
                       <div className="space-y-2">

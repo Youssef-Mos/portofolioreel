@@ -61,6 +61,8 @@ description String? @db.Text
 keyPoints String[] @default([])
 favorite Boolean @default(false)
 logoUrl String?
+githubUrl    String?
+testProject  Boolean   @default(false)
 
 technologies Technology[]
 
@@ -142,6 +144,8 @@ model User {
   sessions      Session[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  appointments  Appointment[]
+
 }
 
 model VerificationToken {
@@ -150,6 +154,33 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Appointment {
+  id          String   @id @default(cuid())
+  date        DateTime // Date du rendez-vous
+  timeSlot    String   // Créneau horaire (ex: "09:00-10:00")
+  name        String
+  email       String
+  phone       String?
+  message     String?  @db.Text
+  status      AppointmentStatus @default(PENDING)
+  userId      String?  // L'admin qui gère les RDV
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@unique([date, timeSlot]) // Un seul RDV par créneau
+  @@index([date])
+  @@index([status])
+}
+
+enum AppointmentStatus {
+  PENDING    // En attente de confirmation
+  CONFIRMED  // Confirmé
+  CANCELLED  // Annulé
+  COMPLETED  // Terminé
 }
 
 enum Role {
