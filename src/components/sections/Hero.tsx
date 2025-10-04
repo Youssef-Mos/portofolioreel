@@ -23,12 +23,20 @@ export const Hero: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleDownloadCV = (type: 'financier' | 'classique') => {
-    // Logique de téléchargement du CV
-    const cvUrl = type === 'financier' ? '/cv-financier.pdf' : '/cv-classique.pdf';
-    window.open(cvUrl, '_blank');
-    setShowCVOptions(false);
-  };
+const handleDownloadCV = (type: 'financier' | 'classique') => {
+  const cvUrl = type === 'financier' ? '/cv-financier.pdf' : '/cv-classique.pdf';
+  const fileName = type === 'financier' ? 'CV_Youssef_Mosbah_1.pdf' : 'CV_Youssef_Mosbah-2.pdf';
+  
+  // Créer un lien temporaire pour forcer le téléchargement
+  const link = document.createElement('a');
+  link.href = cvUrl;
+  link.download = fileName; // Force le téléchargement avec un nom personnalisé
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  
+  setShowCVOptions(false);
+};
 
   return (
     <SectionWrapper id="home" className="relative bg-gradient-to-br from-blue-50/30 via-transparent to-purple-50/30">
